@@ -5,9 +5,11 @@
  */
 
 //Connect to central mycroft server
+
 var app = require('./app.js');
 var client = app.connectToMycroft();
 app.sendManifest(client, './app.json');
+var cronJob = require('cron').CronJob;
 
 var verified = false; //Set to true when APP_MANIFEST_OKAY received
 
@@ -33,6 +35,12 @@ client.on('data', function (data) {
     console.log(' - Type: ' + parsed.type);
     console.log(' - Message:' + JSON.stringify(parsed.data));
   }
+  
+  if(verified){
+	new cronJob('00 0-59 10-18 * * *', function(){
+		informRoom();
+	}, null, true, "America/New_York");
+  }
 
   if(dependencies){
   	if(dependencies.logger == 'up'){
@@ -44,3 +52,7 @@ client.on('data', function (data) {
 client.on('end', function() {
   console.log('client disconnected');
 });
+
+function informRoom(){
+	app.query(client, 'tts', 'say', ['Time to take out the trash']);
+}
