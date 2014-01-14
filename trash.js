@@ -64,7 +64,7 @@ function informRoom(message){
   var msg = ('[INFO] [' + getTime() + '] Sending trash 30 query');
   console.log(msg);
   app.broadcast(client, msg);
-  app.query(client, 'tts', 'say', [message]);
+  app.query(client, 'tts', 'stream', [message, "speakers"], 30);
 }
 
 function getTime(){
