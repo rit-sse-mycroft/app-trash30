@@ -7,8 +7,8 @@
 //Connect to central mycroft server
 
 var app = require('./app.js');
-var fs = require('fs');
 var client = app.connectToMycroft();
+var fs = require('fs');
 app.sendManifest(client, './app.json');
 var cronJob = require('cron').CronJob;
 
@@ -48,7 +48,7 @@ client.on('data', function (data) {
 var array = loadMessages();
 var message = "";
 
-new cronJob('00 0-59 10-18 * * *', function(){
+new cronJob('0-59 * 10-18 * * *', function(){
   if (verified) {
     message = getRandomMessage(array);
     informRoom(message);
@@ -60,7 +60,21 @@ client.on('end', function() {
 });
 
 function informRoom(message){
+  var msg = ('[INFO] [' + getTime() + '] Sending trash 30 query');
+  console.log(msg);
+  app.broadcast(client, msg);
   app.query(client, 'tts', 'say', [message]);
+}
+
+function getTime(){
+  var date = new Date();
+  var split = /(\d+)-(\d+)-(\d+)T(.*)\.(.*)/.exec(date.toISOString());
+  return (
+    split[2] + '/' +
+    split[3] + '/' +
+    split[1] + ' ' +
+    split[4]
+  );
 }
 
 function getRandomMessage(messageArray){
