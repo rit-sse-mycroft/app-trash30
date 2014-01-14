@@ -36,23 +36,24 @@ client.on('data', function (data) {
     console.log(' - Message:' + JSON.stringify(parsed.data));
   }
   
-  if(verified){
-	new cronJob('00 0-59 10-18 * * *', function(){
-		informRoom();
-	}, null, true, "America/New_York");
-  }
 
   if(dependencies){
-  	if(dependencies.logger == 'up'){
-  		app.up(client);
-  	}
+    if(dependencies.logger == 'up'){
+      app.up(client);
+    }
   }
 });
+
+new cronJob('00 30 10-18 * * *', function(){
+  if (verified) {
+    informRoom();
+  }
+}, null, true);
 
 client.on('end', function() {
   console.log('client disconnected');
 });
 
 function informRoom(){
-	app.query(client, 'tts', 'say', ['Time to take out the trash']);
+  app.query(client, 'tts', 'say', ['Time to take out the trash']);
 }

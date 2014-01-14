@@ -7,6 +7,7 @@
     "API": "0",
     "description": "Notifies the lab every hour on the half hour to take out the trash.",
     "dependencies": {
-        "logger": "1.2"
+        "logger": "1.2",
+        "speakers": "1.0"
     }
 }
