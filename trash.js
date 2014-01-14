@@ -7,10 +7,11 @@
 //Connect to central mycroft server
 
 var app = require('./app.js');
-var client = app.connectToMycroft();
 var fs = require('fs');
-app.sendManifest(client, './app.json');
 var cronJob = require('cron').CronJob;
+
+var client = app.connectToMycroft();
+app.sendManifest(client, './app.json');
 
 var verified = false; //Set to true when APP_MANIFEST_OKAY received
 
@@ -45,19 +46,19 @@ client.on('data', function (data) {
   }
 });
 
-var array = loadMessages();
-var message = "";
-
-new cronJob('0-59 * 10-18 * * *', function(){
-  if (verified) {
-    message = getRandomMessage(array);
-    informRoom(message);
-  }
-}, null, true);
-
 client.on('end', function() {
   console.log('client disconnected');
 });
+
+var trashMessageBank = loadMessages('messages.txt');
+var trashMessage = "";
+
+new cronJob('* 30 10-18 * * *', function(){
+  if (verified) {
+    trashMessage = getRandomMessage(trashMessageBank);
+    informRoom(trashMessage);
+  }
+}, null, true);
 
 function informRoom(message){
   var msg = ('[INFO] [' + getTime() + '] Sending trash 30 query');
@@ -68,12 +69,12 @@ function informRoom(message){
 
 function getTime(){
   var date = new Date();
-  var split = /(\d+)-(\d+)-(\d+)T(.*)\.(.*)/.exec(date.toISOString());
+  var parts = /(\d+)-(\d+)-(\d+)T(.*)\.(.*)/.exec(date.toISOString());
   return (
-    split[2] + '/' +
-    split[3] + '/' +
-    split[1] + ' ' +
-    split[4]
+    parts[2] + '/' +
+    parts[3] + '/' +
+    parts[1] + ' ' +
+    parts[4]
   );
 }
 
@@ -82,8 +83,9 @@ function getRandomMessage(messageArray){
   return messageArray[randomNumber];
 }
 
-function loadMessages(){
-  var array = fs.readFileSync('messages.txt').toString().split("\n");
+//Loads messages from the text file specified by 'path'
+function loadMessages(path){
+  var array = fs.readFileSync(path).toString().split("\n");
   for(i in array) {
       console.log(array[i]); //Temporary Validation
   }
