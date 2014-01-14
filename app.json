@@ -1,14 +1,11 @@
 {
     "version": "0.0.1",
-    "name": "test-service",
-    "displayName": "Mycroft test service",
-    "instanceId": "mockapp1",
-    "capabilities": {
-      "microphone": "1.0.0",
-      "speakers": "1.0.0"
-    },
+    "name": "trash-notifier",
+    "displayName": "Trash 30 Notifier",
+    "instanceId": "trash30",
+    "capabilities": {},
     "API": "0",
-    "description": "It does odd stuff like testing or things",
+    "description": "Notifies the lab every hour on the half hour to take out the trash.",
     "dependencies": {
         "logger": "1.2"
     }
