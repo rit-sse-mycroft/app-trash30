@@ -1,0 +1,15 @@
+{
+    "version": "0.0.1",
+    "name": "test-service",
+    "displayName": "Mycroft test service",
+    "instanceId": "mockapp1",
+    "capabilities": {
+      "microphone": "1.0.0",
+      "speakers": "1.0.0"
+    },
+    "API": "0",
+    "description": "It does odd stuff like testing or things",
+    "dependencies": {
+        "logger": "1.2"
+    }
+}
