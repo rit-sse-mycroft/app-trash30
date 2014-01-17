@@ -53,7 +53,7 @@ client.on('end', function() {
 var trashMessageBank = loadMessages('messages.txt');
 var trashMessage = "";
 
-new cronJob('* 30 10-18 * * *', function(){
+new cronJob('* 30 10-17 * * *', function(){
   if (verified) {
     trashMessage = getRandomMessage(trashMessageBank);
     informRoom(trashMessage);
@@ -64,7 +64,7 @@ function informRoom(message){
   var msg = ('[INFO] [' + getTime() + '] Sending trash 30 query');
   console.log(msg);
   app.broadcast(client, msg);
-  app.query(client, 'tts', 'stream', [message, "speakers"], 30);
+  app.query(client, 'tts', 'stream', {text: message, targetSpeaker: "speakers"}, 30);
 }
 
 function getTime(){
